@@ -1,0 +1,54 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+group 'com.imm.mock.service'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: "jetty"
+
+httpPort = 18080
+stopPort = 19080
+stopKey = "stopKey"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+        testCompile('junit:junit:4.11')
+        compile('org.springframework:spring-webmvc:4.2.2.RELEASE')
+        compile('log4j:log4j:1.2.17')
+        compile('org.springframework:spring-test:4.2.2.RELEASE')
+        compile('org.mockito:mockito-all:1.10.19')
+        compile('com.fasterxml:jackson-xml-databind:0.6.2')
+        providedCompile('javax.servlet:javax.servlet-api:3.0.1')
+}
+
+war {
+    archiveName 'imm-ws.war'
+
+    from 'WEB-INF'
+    exclude 'lib-provided'
+
+    from('application.properties'){
+        include 'application.properties'
+        into('WEB-INF/classes')
+    }
+}
+
+processResources{
+    exclude "WEB-INF/lib-provided/javax.servlet-api-3.0.1.jar"
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.6'
+}
